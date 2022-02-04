@@ -1,20 +1,14 @@
 ## Global Variables
 i = 1;
+varNumber = 9;
 
 clauseList = [[1,2,3],[4,5,6],[-7,-8,-9]];
-varStatus = Dict(1=>NaN,
-                 2=>NaN,
-                 3=>NaN,
-                 4=>NaN,
-                 5=>NaN,
-                 6=>NaN,
-                 7=>NaN,
-                 8=>NaN,
-                 9=>NaN
-                 ) # Put more stuff here later
-for i in 1:length(varStatus)
+varStatus = Dict()
+for i=1:varNumber
+        varStatus[i] = NaN
         varStatus[-i] = NaN
-end
+end   # Put more stuff here later
+
 varClause = Dict(1=>clauseList[1],
                  2=>clauseList[1],
                  3=>clauseList[1],
