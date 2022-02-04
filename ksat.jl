@@ -2,7 +2,7 @@
 i = 1;
 varNumber = 9; # Don't forget to change this
 
-clauseList = [[1,2,3],[4,5,6],[-7,-8,-9]];
+clauseList = [[1,2,3],[4,5,6],[-7,-8,-9],[-7,-8,9]];
 varStatus = Dict()
 for i=1:varNumber
         varStatus[i] = NaN
@@ -15,9 +15,9 @@ varClause = Dict(1=>clauseList[1],
                  4=>clauseList[2],
                  5=>clauseList[2],
                  6=>clauseList[2],
-                 7=>clauseList[3],
-                 8=>clauseList[3],
-                 9=>clauseList[3]
+                 7=>[clauseList[3],clauseList[4]],
+                 8=>[clauseList[3],clauseList[4]],
+                 9=>[clauseList[3],clauseList[4]]
                  )
 clauseStatus = Dict()
 for i=1:length(clauseList)
