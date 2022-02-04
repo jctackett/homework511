@@ -34,7 +34,7 @@ numtries = 0;
 
 ## Functions
 
-function reduceC(varNext::Int, status)
+function reduceC(varNext::Int, status::Bool)
         # Might need to throw in a ton of globals
 
         global numtries+=1;
@@ -83,7 +83,7 @@ end
 function solveT()
 
         global i = 1
-        while varStatus[i] == true | false
+        while varStatus[i] !== NaN
                 global i += 1;
                 if i>length(varStatus)/2
                         println(keys(varStatus), values(varStatus))
@@ -98,7 +98,7 @@ function solveT()
 
 
         for m in [true, false]
-                if varStatus[varNext] != true | false
+                if varStatus[i] === NaN
                         worked, varSet, clauseSet = reduceC(varNext, m)
                 else
                         println(keys(varStatus), values(varStatus))
@@ -111,7 +111,7 @@ function solveT()
                                 return complete, tries
                         end
                 else
-
+                        varStatus[i] = NaN
                         for i in clauseSet
                                 clauseStatus[i] = NaN
                         end
