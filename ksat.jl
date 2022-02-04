@@ -1,6 +1,6 @@
 ## Global Variables
 i = 1;
-varNumber = 9;
+varNumber = 9; # Don't forget to change this
 
 clauseList = [[1,2,3],[4,5,6],[-7,-8,-9]];
 varStatus = Dict()
