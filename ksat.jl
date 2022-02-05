@@ -3,7 +3,7 @@ i = 1; # Used to find next variable
 varNumber = 7; # Don't forget to change this
 varPrev = 0; # Used in singlet optimization
 
-clauseList = [[1,2,3],[4,5,6],[7],[-7]];
+clauseList = [[7],[1,2,3],[4,5,6],[-7]];
 varStatus = Dict()
 for i=1:varNumber
         varStatus[i] = NaN
@@ -85,7 +85,12 @@ function checkForSinglets()
         for n = 1:length(clauseList)
                 if clauseStatus[clauseList[n]] === NaN
                         if length(clauseList[n]) == 1
-                                return n
+                                if n <= varPrev
+                                        nothing
+                                else
+                                        global varPrev = n;
+                                        return n
+                                end
                         end
                 end
         end
@@ -112,12 +117,7 @@ function solveT()
 
         varNext = i;
         if typeof(checkForSinglets()) == Int64
-                if checkForSinglets() == varPrev
-                        nothing
-                else
-                        varNext = checkForSinglets();
-                        global varPrev = varNext;
-                end
+                varNext = checkForSinglets();
         end
 
 
