@@ -1,6 +1,7 @@
 ## Global Variables
-i = 1;
+i = 1; # Used to find next variable
 varNumber = 7; # Don't forget to change this
+varPrev = 0; # Used in singlet optimization
 
 clauseList = [[1,2,3],[4,5,6],[7],[-7]];
 varStatus = Dict()
@@ -9,14 +10,22 @@ for i=1:varNumber
         varStatus[-i] = NaN
 end   # Put more stuff here later
 
-varClause = Dict(1=>clauseList[1],
-                 2=>clauseList[1],
-                 3=>clauseList[1],
-                 4=>clauseList[2],
-                 5=>clauseList[2],
-                 6=>clauseList[2],
-                 7=>[clauseList[3],clauseList[4]]
-                 )
+#varClause = Dict(1=>clauseList[1],
+#                 2=>clauseList[1],
+#                 3=>clauseList[1],
+#                 4=>clauseList[2],
+#                 5=>clauseList[2],
+#                 6=>clauseList[2],
+#                 7=>[clauseList[3],clauseList[4]]
+#                 )
+#for i = 1:varNumber
+#        for j = 1:length(clauseList)
+#                for n = 1:length(clauseList[j])
+#                        if clauseList[j][n] == i
+#                                varClause[i] =
+#
+#end
+
 clauseStatus = Dict()
 for i=1:length(clauseList)
         clauseStatus[clauseList[i]] = NaN
@@ -71,6 +80,20 @@ function reduceC(varNext::Int, status::Bool)
 end
 
 
+function checkForSinglets()
+
+        for n = 1:length(clauseList)
+                if clauseStatus[clauseList[n]] === NaN
+                        if length(clauseList[n]) == 1
+                                return n
+                        end
+                end
+        end
+        return false
+
+end
+
+
 
 function solveT()
         println(varStatus)
@@ -86,7 +109,16 @@ function solveT()
         end
 
 
+
         varNext = i;
+        if typeof(checkForSinglets()) == Int64
+                if checkForSinglets() == varPrev
+                        nothing
+                else
+                        varNext = checkForSinglets();
+                        global varPrev = varNext;
+                end
+        end
 
 
         for m in [true, false]
