@@ -1,35 +1,11 @@
+## Packages and Using
+using Random
+using Distributions
+
 ## Global Variables
 i = 1; # Used to find next variable
 varNumber = 7; # Don't forget to change this
 varPrev = 0; # Used in singlet optimization
-
-clauseList = [[7],[1,2,3],[4,5,6],[-7]];
-varStatus = Dict()
-for i=1:varNumber
-        varStatus[i] = NaN
-        varStatus[-i] = NaN
-end   # Put more stuff here later
-
-#varClause = Dict(1=>clauseList[1],
-#                 2=>clauseList[1],
-#                 3=>clauseList[1],
-#                 4=>clauseList[2],
-#                 5=>clauseList[2],
-#                 6=>clauseList[2],
-#                 7=>[clauseList[3],clauseList[4]]
-#                 )
-#for i = 1:varNumber
-#        for j = 1:length(clauseList)
-#                for n = 1:length(clauseList[j])
-#                        if clauseList[j][n] == i
-#                                varClause[i] =
-#
-#end
-
-clauseStatus = Dict()
-for i=1:length(clauseList)
-        clauseStatus[clauseList[i]] = NaN
-end
 
 numtries = 0;
 
@@ -56,7 +32,7 @@ function reduceC(varNext::Int, status::Bool)
                         nothing
                 else
                         for j=1:length(clauseList[i]) # Checking each element of clause
-                                println(j)
+
                                 if j>length(clauseList[i]) # Catching error that arises when a variable is deleted
                                         break
                                 end
@@ -98,6 +74,62 @@ function checkForSinglets()
 
 end
 
+function useHardCodedData()
+        clauseList = [[7],[1,2,3],[4,5,6],[-7]];
+        varStatus = Dict()
+        for i=1:varNumber
+                varStatus[i] = NaN
+                varStatus[-i] = NaN
+        end   # Put more stuff here later
+
+        #varClause = Dict(1=>clauseList[1],
+        #                 2=>clauseList[1],
+        #                 3=>clauseList[1],
+        #                 4=>clauseList[2],
+        #                 5=>clauseList[2],
+        #                 6=>clauseList[2],
+        #                 7=>[clauseList[3],clauseList[4]]
+        #                 )
+        #for i = 1:varNumber
+        #        for j = 1:length(clauseList)
+        #                for n = 1:length(clauseList[j])
+        #                        if clauseList[j][n] == i
+        #                                varClause[i] =
+        #
+        #end
+
+        clauseStatus = Dict()
+        for i=1:length(clauseList)
+                clauseStatus[clauseList[i]] = NaN
+        end
+
+
+end
+
+function useRandomData(clauseNumber::Int, variableNumber::Int, variablesPerClause::Int)
+        seed = Random.seed!;
+        global clauseList = [];
+
+        for m in 1:clauseNumber
+
+                push!(clauseList,randperm(variableNumber)[1:variablesPerClause] .* sample([-1,1], variablesPerClause))
+
+        end
+
+        global varStatus = Dict()
+        for i=1:varNumber
+                varStatus[i] = NaN
+                varStatus[-i] = NaN
+        end   # Put more stuff here later
+
+        global clauseStatus = Dict()
+        for i=1:length(clauseList)
+                clauseStatus[clauseList[i]] = NaN
+        end
+
+
+end
+
 
 
 function solveT()
@@ -110,7 +142,6 @@ function solveT()
                         return true, numtries
                 end
 
-                println(i)
         end
 
 
