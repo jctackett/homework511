@@ -21,6 +21,10 @@ function reduceC(varNext::Int, status::Bool)
 
         # Going through the clauses and updating the statuses with new varNext status
         for i in 1:length(clauseList)
+                #checkForRedundancy()
+                if i > length(clauseList)
+                        break
+                end
                 if clauseStatus[clauseList[i]] == true # If clause status is true, we're done with this one
                         nothing
                 else
@@ -38,6 +42,10 @@ function reduceC(varNext::Int, status::Bool)
                                                 delete!(clauseStatus, clauseList[i])
                                                 deleteat!(clauseList[i],j)
                                                 global clauseStatus[clauseList[i]] = NaN
+                                                println("Post deleting status")
+                                                println(clauseStatus)
+                                                println("Post deleting clauseList[i]")
+                                                println(clauseList[i])
                                         else
                                                 return false, varSet, clauseSet
                                         end
@@ -48,6 +56,26 @@ function reduceC(varNext::Int, status::Bool)
         return true, varSet, clauseSet
 end
 
+function checkForRedundancy()
+        for k in 1:length(clauseList)
+                if k > length(clauseList)
+                        break
+                end
+                for j in length(clauseList)
+                        if j > length(clauseList)
+                                break
+                        end
+                        if k == j
+                                nothing
+                        else
+                                if clauseList[k] == clauseList[j]
+                                        deleteat!(clauseList,j)
+                                end
+                        end
+                end
+        end
+
+end
 
 function checkForSinglets()
 
@@ -58,7 +86,7 @@ function checkForSinglets()
                                         nothing
                                 else
                                         global varPrev = n;
-                                        return n
+                                        return clauseList[n][1]
                                 end
                         end
                 end
@@ -112,7 +140,6 @@ function useRandomData(clauseNumber::Int, variableNumber::Int, variablesPerClaus
 
         global numtries = 0;
 
-        seed = Random.seed!;
         global clauseList = [];
 
         for m in 1:clauseNumber
@@ -139,6 +166,7 @@ end
 
 function solveT()
         println(varStatus)
+        println(clauseStatus)
         global i = 1
         while varStatus[i] !== NaN
                 global i += 1;
@@ -155,6 +183,9 @@ function solveT()
         if typeof(checkForSinglets()) == Int64
                 varNext = checkForSinglets();
         end
+        if typeof(varNext) == Bool # Failsafe in case somehow varNext becomes false
+                varNext = i
+        end
 
 
         for m in [true, false]
@@ -162,6 +193,7 @@ function solveT()
                         worked, varSet, clauseSet = reduceC(varNext, m)
                 else
                         println(keys(varStatus), values(varStatus))
+                        println(clauseStatus)
                         return true, numtries
                 end
                 if worked
@@ -171,17 +203,26 @@ function solveT()
                                 return complete, tries
                         end
                 else
-                        varStatus[i] = NaN
-                        varStatus[-i] = NaN
+
 
                         for i in clauseSet
                                 clauseStatus[clauseList[i]] = NaN
                         end
 
                         for i in 1:length(varSet)
+                                println("VarSet:")
+                                println(varSet)
+                                println("ClauseList")
+                                println(clauseList)
+
+                                varStatus[varSet[i][1]] = NaN
+                                varStatus[-varSet[i][1]] = NaN
+                                delete!(clauseStatus, clauseList[varSet[i][2]])
                                 push!(clauseList[varSet[i][2]],varSet[i][1]) # This line is sus, check later
-                                delete!(clauseStatus, varSet[i][2])
+                                println(varSet[i][2])
                                 global clauseStatus[clauseList[varSet[i][2]]] = NaN
+                                println("Missing clause?")
+                                println(clauseList[varSet[i][2]])
                         end
                 end
         end
