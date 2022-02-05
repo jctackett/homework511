@@ -2,13 +2,6 @@
 using Random
 using Distributions
 
-## Global Variables
-i = 1; # Used to find next variable
-varNumber = 7; # Don't forget to change this
-varPrev = 0; # Used in singlet optimization
-
-numtries = 0;
-
 ## Functions
 
 function reduceC(varNext::Int, status::Bool)
@@ -75,6 +68,12 @@ function checkForSinglets()
 end
 
 function useHardCodedData()
+        global i = 1; # Used to find next variable
+        global varNumber = 7; # Don't forget to change this
+        global varPrev = 0; # Used in singlet optimization
+
+        global numtries = 0;
+
         clauseList = [[7],[1,2,3],[4,5,6],[-7]];
         varStatus = Dict()
         for i=1:varNumber
@@ -107,6 +106,12 @@ function useHardCodedData()
 end
 
 function useRandomData(clauseNumber::Int, variableNumber::Int, variablesPerClause::Int)
+        global i = 1; # Used to find next variable
+        global varNumber = variableNumber; # Don't forget to change this
+        global varPrev = 0; # Used in singlet optimization
+
+        global numtries = 0;
+
         seed = Random.seed!;
         global clauseList = [];
 
