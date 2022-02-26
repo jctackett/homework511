@@ -1,3 +1,5 @@
+using QuadGK
+
 ## Problem 1
 
 function mySin(x, n)
@@ -64,4 +66,20 @@ function g(x)
     else
         return 0
     end
+end
+
+function blackbox()
+    i1 = 7.9549265210128452745132196653294;
+    i23 = .87070265620795901020832433774759;
+
+    i1dif = quadgk(x -> f2(x),-pi,pi)[1] - i1;
+
+    i2dif = quadgk(x -> f2(x),-1,1)[1] - i23;
+
+    i3dif = quadgk(x -> g(x), -pi, pi)[1] - i23;
+
+    println("I1, I2, and I3 differences: \n", i1dif, "\n", i2dif, "\n", i3dif)
+
+    # Uses adaptive Gauss-Kronrod quadrature
+
 end
