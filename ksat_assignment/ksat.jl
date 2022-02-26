@@ -66,7 +66,7 @@ function checkForRedundancy()
                 if k > length(clauseList)
                         break
                 end
-                for j in length(clauseList)
+                for j in 1:length(clauseList)
                         if j > length(clauseList)
                                 break
                         end

@@ -1,0 +1,29 @@
+function TimeFunction(func, args...)
+
+    return @time func(args)
+
+end
+
+function GenerateMatrices()
+    n = 100;
+
+    A = 10 .* rand(n, n);
+    b = 10 .* rand(n, 1);
+
+    return A, b
+
+end
+
+function InverseMethod(A, b)
+    return inv(A)*b
+end
+
+function BetterMethod(A, b)
+    return A / b
+end
+
+function InverseTimeTaken()
+
+    time = 0;
+
+end
